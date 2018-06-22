@@ -23,6 +23,9 @@ export default class MenuScreen extends Component {
         <TouchableOpacity style={styles.menu} onPress={this.onAgendaPress.bind(this)}>
           <Text style={styles.menuText}>Agenda</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.menu} onPress={this.onCalendarWeekModePress.bind(this)}>
+          <Text style={styles.menuText}>Calendar Week Mode</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -52,6 +55,13 @@ export default class MenuScreen extends Component {
     this.props.navigator.push({
       screen: 'Agenda',
       title: 'Agenda'
+    });
+  }
+
+  onCalendarWeekModePress() {
+    this.props.navigator.push({
+      screen: 'CalendarWeekMode',
+      title: 'Calendar Week Mode'
     });
   }
 }
