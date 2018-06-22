@@ -11,7 +11,9 @@ export default class CalendarWeekModeScreen extends Component {
 
   render() {
     return (
-      <Calendar />
+      <Calendar
+        viewMode={'week'}
+      />
     );
   }
 }

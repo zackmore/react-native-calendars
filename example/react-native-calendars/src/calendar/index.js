@@ -83,7 +83,7 @@ class Calendar extends Component {
   };
 
   static defaultProps = {
-    viewMode: 'week'
+    viewMode: 'month'
   };
 
   constructor(props) {
