@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {
   View,
+  Text,
   ViewPropTypes
 } from 'react-native';
 import PropTypes from 'prop-types';
@@ -82,28 +83,28 @@ class Calendar extends Component {
   };
 
   static defaultProps = {
-    viewMode: 'month'
+    viewMode: 'week'
   };
 
   constructor(props) {
     super(props);
     this.style = styleConstructor(this.props.theme);
     let currentMonth;
-    let currentWeek;
+
     if (props.current) {
       currentMonth = parseDate(props.current);
-      currentWeek = parseDate(props.current);
     } else {
       currentMonth = XDate();
-      currentWeek = XDate();
     }
+
     this.state = {
-      currentMonth,
-      currentWeek
+      currentMonth
     };
 
     this.updateMonth = this.updateMonth.bind(this);
+    this.updateWeek = this.updateWeek.bind(this);
     this.addMonth = this.addMonth.bind(this);
+    this.addWeek = this.addWeek.bind(this);
     this.pressDay = this.pressDay.bind(this);
     this.longPressDay = this.longPressDay.bind(this);
     this.shouldComponentUpdate = shouldComponentUpdate;
@@ -137,6 +138,12 @@ class Calendar extends Component {
     });
   }
 
+  updateWeek(day) {
+    this.setState({
+      currentMonth: day.clone()
+    });
+  }
+
   _handleDayInteraction(date, interaction) {
     const day = parseDate(date);
     const minDate = parseDate(this.props.minDate);
@@ -162,6 +169,10 @@ class Calendar extends Component {
 
   addMonth(count) {
     this.updateMonth(this.state.currentMonth.clone().addMonths(count, true));
+  }
+
+  addWeek(count) {
+    this.updateWeek(this.state.currentMonth.clone().addWeeks(count));
   }
 
   renderDay(day, id) {
@@ -253,7 +264,13 @@ class Calendar extends Component {
   }
 
   render() {
-    const days = dateutils.page(this.state.currentMonth, this.props.firstDay);
+    let days;
+    if (this.props.viewMode === 'month') {
+      days = dateutils.page(this.state.currentMonth, this.props.firstDay);
+    } else if (this.props.viewMode === 'week') {
+      days = dateutils.week(this.state.currentMonth);
+    }
+
     const weeks = [];
     while (days.length) {
       weeks.push(this.renderWeek(days.splice(0, 7), weeks.length));
@@ -268,8 +285,8 @@ class Calendar extends Component {
       }
     }
 
-    console.log(days)
-    // console.log(weeks)
+    console.log(weeks)
+
     return (
       <View style={[this.style.container, this.props.style]}>
         <CalendarHeader
@@ -277,6 +294,7 @@ class Calendar extends Component {
           hideArrows={this.props.hideArrows}
           month={this.state.currentMonth}
           addMonth={this.addMonth}
+          addWeek={this.addWeek}
           showIndicator={indicator}
           firstDay={this.props.firstDay}
           renderArrow={this.props.renderArrow}
@@ -285,6 +303,7 @@ class Calendar extends Component {
           weekNumbers={this.props.showWeekNumbers}
           onPressArrowLeft={this.props.onPressArrowLeft}
           onPressArrowRight={this.props.onPressArrowRight}
+          viewMode={this.props.viewMode}
         />
         <View style={this.style.monthView}>{weeks}</View>
       </View>);
