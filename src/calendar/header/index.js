@@ -12,13 +12,15 @@ class CalendarHeader extends Component {
     hideArrows: PropTypes.bool,
     month: PropTypes.instanceOf(XDate),
     addMonth: PropTypes.func,
+    addWeek: PropTypes.func,
     showIndicator: PropTypes.bool,
     firstDay: PropTypes.number,
     renderArrow: PropTypes.func,
     hideDayNames: PropTypes.bool,
     weekNumbers: PropTypes.bool,
     onPressArrowLeft: PropTypes.func,
-    onPressArrowRight: PropTypes.func
+    onPressArrowRight: PropTypes.func,
+    viewMode: PropTypes.oneOf(['week', 'month'])
   };
 
   constructor(props) {
@@ -26,6 +28,8 @@ class CalendarHeader extends Component {
     this.style = styleConstructor(props.theme);
     this.addMonth = this.addMonth.bind(this);
     this.substractMonth = this.substractMonth.bind(this);
+    this.addWeek = this.addWeek.bind(this);
+    this.substractWeek = this.substractWeek.bind(this);
     this.onPressLeft = this.onPressLeft.bind(this);
     this.onPressRight = this.onPressRight.bind(this);
   }
@@ -36,6 +40,14 @@ class CalendarHeader extends Component {
 
   substractMonth() {
     this.props.addMonth(-1);
+  }
+
+  addWeek() {
+    this.props.addWeek(1);
+  }
+
+  substractWeek() {
+    this.props.addWeek(-1);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -55,19 +67,37 @@ class CalendarHeader extends Component {
   }
 
   onPressLeft() {
-    const {onPressArrowLeft} = this.props;
+    const {onPressArrowLeft, viewMode} = this.props;
     if(typeof onPressArrowLeft === 'function') {
-      return onPressArrowLeft(this.substractMonth);
+      if (viewMode === 'month') {
+        return onPressArrowLeft(this.substractMonth);
+      } else if (viewMode === 'week') {
+        return onPressArrowLeft(this.substractWeek);
+      }
     }
-    return this.substractMonth();
+
+    if (viewMode === 'month') {
+      return this.substractMonth();
+    } else if (viewMode === 'week') {
+      return this.substractWeek();
+    }
   }
 
   onPressRight() {
-    const {onPressArrowRight} = this.props;
+    const {onPressArrowRight, viewMode} = this.props;
     if(typeof onPressArrowRight === 'function') {
-      return onPressArrowRight(this.addMonth);
+      if (viewMode === 'month') {
+        return onPressArrowRight(this.addMonth);
+      } else if (viewMode === 'week') {
+        return onPressArrowRight(this.addWeek);
+      }
     }
-    return this.addMonth();
+
+    if (viewMode === 'month') {
+      return this.addMonth();
+    } else if (viewMode === 'week') {
+      return this.addWeek();
+    }
   }
 
   render() {

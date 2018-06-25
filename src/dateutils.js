@@ -40,6 +40,15 @@ function month(xd) {
   return fromTo(firstDay, lastDay);
 }
 
+function week(xd) {
+  const day = xd.getDay();
+  
+  const firstDay = (new XDate(xd)).addDays(-day);
+  const lastDay = (new XDate(xd)).addDays(6 - day);
+
+  return fromTo(firstDay, lastDay);
+}
+
 function weekDayNames(firstDayOfWeek = 0) {
   let weekDaysNames = XDate.locales[XDate.defaultLocale].dayNamesShort;
   const dayShift = firstDayOfWeek % 7;
@@ -85,6 +94,7 @@ module.exports = {
   sameMonth,
   sameDate,
   month,
+  week,
   page,
   fromTo,
   isLTE,
