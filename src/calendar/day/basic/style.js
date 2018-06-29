@@ -7,9 +7,9 @@ export default function styleConstructor(theme={}) {
   const appStyle = {...defaultStyle, ...theme};
   return StyleSheet.create({
     base: {
-      width: 32,
-      height: 32,
-      alignItems: 'center'
+      width: 44,
+      height: 44,
+      alignItems: 'center',
     },
     text: {
       marginTop: Platform.OS === 'android' ? 4 : 6,
@@ -17,29 +17,36 @@ export default function styleConstructor(theme={}) {
       fontFamily: appStyle.textDayFontFamily,
       fontWeight: '300',
       color: appStyle.dayTextColor,
-      backgroundColor: 'rgba(255, 255, 255, 0)'
+      backgroundColor: 'rgba(255, 255, 255, 0)',
+      width: 24,
+      height: 24,
+      textAlign: 'center',
+      lineHeight: 24
     },
     alignedText: {
       marginTop: Platform.OS === 'android' ? 4 : 6
     },
     selected: {
       backgroundColor: appStyle.selectedDayBackgroundColor,
-      borderRadius: 16
     },
     todayText: {
-      color: appStyle.todayTextColor
+      color: appStyle.todayTextColor,
+      backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      borderRadius: 12
     },
     selectedText: {
-      color: appStyle.selectedDayTextColor
+      color: appStyle.selectedDayTextColor,
+      backgroundColor: appStyle.selectedDayBackgroundColor,
+      borderRadius: 12
     },
     disabledText: {
       color: appStyle.textDisabledColor
     },
     dot: {
-      width: 4,
-      height: 4,
-      marginTop: 1,
-      borderRadius: 2,
+      width: 6,
+      height: 6,
+      marginTop: 4,
+      borderRadius: 3,
       opacity: 0
     },
     visibleDot: {
@@ -47,7 +54,7 @@ export default function styleConstructor(theme={}) {
       backgroundColor: appStyle.dotColor
     },
     selectedDot: {
-      backgroundColor: appStyle.selectedDotColor
+      backgroundColor: appStyle.dotColor
     },
     ...(theme[STYLESHEET_ID] || {})
   });
