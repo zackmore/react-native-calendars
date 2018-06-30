@@ -332,7 +332,6 @@ class Calendar extends Component {
           onPressArrowLeft={this.props.onPressArrowLeft}
           onPressArrowRight={this.props.onPressArrowRight}
           viewMode={this.props.viewMode}
-          ref={ header => this.header = header }
         />
         <View style={this.style.monthView}>{weeks}</View>
       </View>);
