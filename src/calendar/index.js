@@ -285,8 +285,6 @@ class Calendar extends Component {
       }
     }
 
-    console.log(weeks)
-
     return (
       <View style={[this.style.container, this.props.style]}>
         <CalendarHeader
@@ -304,6 +302,7 @@ class Calendar extends Component {
           onPressArrowLeft={this.props.onPressArrowLeft}
           onPressArrowRight={this.props.onPressArrowRight}
           viewMode={this.props.viewMode}
+          ref={ header => this.header = header }
         />
         <View style={this.style.monthView}>{weeks}</View>
       </View>);
