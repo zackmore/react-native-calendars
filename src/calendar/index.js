@@ -83,22 +83,26 @@ class Calendar extends Component {
   };
 
   static defaultProps = {
-    viewMode: 'month'
+    viewMode: 'week'
   };
 
   constructor(props) {
     super(props);
     this.style = styleConstructor(this.props.theme);
     let currentMonth;
+    let currentWeek;
 
     if (props.current) {
       currentMonth = parseDate(props.current);
+      currentWeek = parseDate(props.current);
     } else {
       currentMonth = XDate();
+      currentWeek = XDate();
     }
 
     this.state = {
-      currentMonth
+      currentMonth,
+      currentWeek
     };
 
     this.updateMonth = this.updateMonth.bind(this);
@@ -111,11 +115,19 @@ class Calendar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const current= parseDate(nextProps.current);
-    if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
-      this.setState({
-        currentMonth: current.clone()
-      });
+    const current = parseDate(nextProps.current);
+    if (this.props.viewMode === 'month') {
+      if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
+        this.setState({
+          currentMonth: current.clone()
+        });
+      }
+    } else if (this.props.viewMode === 'week') {
+      if (current && current.toString('yyyy MM') !== this.state.currentWeek.toString('yyyy MM')) {
+        this.setState({
+          currentWeek: current.clone()
+        });
+      }
     }
   }
 
@@ -189,6 +201,7 @@ class Calendar extends Component {
       state = 'today';
     }
     let dayComp;
+    /*
     if (!dateutils.sameMonth(day, this.state.currentMonth) && this.props.hideExtraDays) {
       if (['period', 'multi-period'].includes(this.props.markingType)) {
         dayComp = (<View key={id} style={{flex: 1}}/>);
@@ -212,6 +225,23 @@ class Calendar extends Component {
         </DayComp>
       );
     }
+    */
+
+      const DayComp = this.getDayComponent();
+      const date = day.getDate();
+      dayComp = (
+        <DayComp
+          key={id}
+          state={state}
+          theme={this.props.theme}
+          onPress={this.pressDay}
+          onLongPress={this.longPressDay}
+          date={xdateToData(day)}
+          marking={this.getDateMarking(day)}
+        >
+          {date}
+        </DayComp>
+      );
     return dayComp;
   }
 
