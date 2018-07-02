@@ -115,31 +115,74 @@ class CalendarList extends Component {
     }
     const size = this.props.horizontal ? this.calendarWidth : this.calendarHeight;
     const scrollAmount = (size * this.pastScrollRange) + (diff * size);
-    //console.log(month, this.state.openDate);
-    //console.log(scrollAmount, diffMonths);
+    // console.log(month, this.state.openDate);
+    // console.log(scrollAmount, diff);
     this.listView.scrollToOffset({offset: scrollAmount, animated: false});
   }
 
   componentWillReceiveProps(props) {
-    const current = parseDate(this.props.current);
-    const nextCurrent = parseDate(props.current);
-    if (nextCurrent && current && nextCurrent.getTime() !== current.getTime()) {
-      this.scrollToMonth(nextCurrent);
-    }
-
-    const rowclone = this.state.rows;
-    const newrows = [];
-    for (let i = 0; i < rowclone.length; i++) {
-      let val = this.state.texts[i];
-      if (rowclone[i].getTime) {
-        val = rowclone[i].clone();
-        val.propbump = rowclone[i].propbump ? rowclone[i].propbump + 1 : 1;
+    // Changed:
+    if (props.viewMode !== this.props.viewMode) {
+      // viewMode changed, re-get rows
+      const rows = [];
+      const texts = [];
+      const date = parseDate(props.current) || XDate();
+      for (let i = 0; i <= this.pastScrollRange + this.futureScrollRange; i++) {
+        let rangeDate;
+        let rangeDateStr;
+        if (props.viewMode === 'month') {
+          rangeDate = date.clone().addMonths(i - this.pastScrollRange, true);
+          rangeDateStr = rangeDate.toString('MMM yyyy');
+        } else if (props.viewMode === 'week') {
+          rangeDate = date.clone().addWeeks(i - this.pastScrollRange, true);
+          rangeDateStr = rangeDate.toString('w MMM yyyy');
+        }
+        texts.push(rangeDateStr);
+        /*
+         * This selects range around current shown month [-0, +2] or [-1, +1] month for detail calendar rendering.
+         * If `this.pastScrollRange` is `undefined` it's equal to `false` or 0 in next condition.
+         */
+        if (this.pastScrollRange - 1 <= i && i <= this.pastScrollRange + 1 || !this.pastScrollRange && i <= this.pastScrollRange + 2) {
+          rows.push(rangeDate);
+        } else {
+          rows.push(rangeDateStr);
+        }
       }
-      newrows.push(val);
+
+      this.setState({
+        rows,
+        texts
+      });
+
+      setTimeout(() => {
+        const current = parseDate(this.props.current);
+        const nextCurrent = parseDate(props.current);
+        if (nextCurrent && current) {
+          this.scrollToMonth(nextCurrent);
+        }
+      }, 100);
+    } else {
+      const current = parseDate(this.props.current);
+      const nextCurrent = parseDate(props.current);
+      if (nextCurrent && current && nextCurrent.getTime() !== current.getTime()) {
+        this.scrollToMonth(nextCurrent);
+      }
+
+      const rowclone = this.state.rows;
+      const newrows = [];
+      for (let i = 0; i < rowclone.length; i++) {
+        let val = this.state.texts[i];
+        if (rowclone[i].getTime) {
+          val = rowclone[i].clone();
+          val.propbump = rowclone[i].propbump ? rowclone[i].propbump + 1 : 1;
+        }
+        newrows.push(val);
+      }
+
+      this.setState({
+        rows: newrows
+      });
     }
-    this.setState({
-      rows: newrows
-    });
   }
 
   onViewableItemsChanged({viewableItems}) {
