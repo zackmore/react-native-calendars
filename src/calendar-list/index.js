@@ -70,11 +70,11 @@ class CalendarList extends Component {
       let rangeDateStr;
       if (this.props.viewMode === 'month') {
         rangeDate = date.clone().addMonths(i - this.pastScrollRange, true);
-        rangeDateStr = rangeDate.toString('MMM yyyy');
       } else if (this.props.viewMode === 'week') {
         rangeDate = date.clone().addWeeks(i - this.pastScrollRange, true);
-        rangeDateStr = rangeDate.toString('w MMM yyyy');
       }
+      // rangeDateStr = rangeDate.toString('MM yyyy');
+      rangeDateStr = '请稍后...';
       texts.push(rangeDateStr);
       /*
        * This selects range around current shown month [-0, +2] or [-1, +1] month for detail calendar rendering.
@@ -135,11 +135,11 @@ class CalendarList extends Component {
         let rangeDateStr;
         if (props.viewMode === 'month') {
           rangeDate = date.clone().addMonths(i - this.pastScrollRange, true);
-          rangeDateStr = rangeDate.toString('MMM yyyy');
         } else if (props.viewMode === 'week') {
           rangeDate = date.clone().addWeeks(i - this.pastScrollRange, true);
-          rangeDateStr = rangeDate.toString('w MMM yyyy');
         }
+        // rangeDateStr = rangeDate.toString('MM yyyy');
+        rangeDateStr = '请稍候...';
         texts.push(rangeDateStr);
         /*
          * This selects range around current shown month [-0, +2] or [-1, +1] month for detail calendar rendering.

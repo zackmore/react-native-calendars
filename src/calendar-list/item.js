@@ -10,6 +10,7 @@ class CalendarListItem extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    if (nextProps.viewMode !== this.props.viewMode) return true;
     const r1 = this.props.item;
     const r2 = nextProps.item;
     return r1.toString('yyyy MM') !== r2.toString('yyyy MM') || !!(r2.propbump && r2.propbump !== r1.propbump);
