@@ -119,7 +119,7 @@ class CalendarList extends Component {
     const size = this.props.horizontal ? this.calendarWidth : this.calendarHeight;
     const scrollAmount = (size * this.pastScrollRange) + (diff * size);
     // console.log(month, this.state.openDate);
-    // console.log(scrollAmount, diff);
+    // console.log(scrollAmount, diff, this.props.viewMode);
     this.listView.scrollToOffset({offset: scrollAmount, animated: false});
   }
 
@@ -154,16 +154,14 @@ class CalendarList extends Component {
 
       this.setState({
         rows,
-        texts
+        texts,
+        openDate: date
       });
 
       setTimeout(() => {
-        const current = parseDate(this.props.current);
         const nextCurrent = parseDate(props.current);
-        if (nextCurrent && current) {
-          this.scrollToMonth(nextCurrent);
-        }
-      }, 100);
+        this.scrollToMonth(nextCurrent);
+      }, 10);
     } else {
       const current = parseDate(this.props.current);
       const nextCurrent = parseDate(props.current);
