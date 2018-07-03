@@ -12,6 +12,9 @@ import Calendar from '../calendar';
 import CalendarListItem from './item';
 
 const {width} = Dimensions.get('window');
+const viewabilityConfig = {
+  itemVisiblePercentThreshold: 50
+};
 
 class CalendarList extends Component {
   static propTypes = {
@@ -253,6 +256,7 @@ class CalendarList extends Component {
         horizontal={this.props.horizontal || false}
         pagingEnabled={this.props.pagingEnabled}
         onViewableItemsChanged={this.onViewableItemsChangedBound}
+        viewabilityConfig={viewabilityConfig}
         renderItem={this.renderCalendarBound}
         showsVerticalScrollIndicator={this.props.showScrollIndicator !== undefined ? this.props.showScrollIndicator : false}
         showsHorizontalScrollIndicator={this.props.showScrollIndicator !== undefined ? this.props.showScrollIndicator : false}

@@ -116,17 +116,30 @@ class Calendar extends Component {
 
   componentWillReceiveProps(nextProps) {
     const current = parseDate(nextProps.current);
-    if (this.props.viewMode === 'month') {
-      if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
+    if (nextProps.viewMode !== this.props.viewMode) {
+      if (nextProps.viewMode === 'month') {
         this.setState({
           currentMonth: current.clone()
-        });
+        })
       }
-    } else if (this.props.viewMode === 'week') {
-      if (current && current.toString('yyyy MM') !== this.state.currentWeek.toString('yyyy MM')) {
+      if (nextProps.viewMode === 'week') {
         this.setState({
           currentWeek: current.clone()
-        });
+        })
+      }
+    } else {
+      if (this.props.viewMode === 'month') {
+        if (current && current.toString('yyyy MM') !== this.state.currentMonth.toString('yyyy MM')) {
+          this.setState({
+            currentMonth: current.clone()
+          });
+        }
+      } else if (this.props.viewMode === 'week') {
+        if (current && current.toString('yyyy MM') !== this.state.currentWeek.toString('yyyy MM')) {
+          this.setState({
+            currentWeek: current.clone()
+          });
+        }
       }
     }
   }
